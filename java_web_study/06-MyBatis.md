@@ -85,14 +85,60 @@ JDBC缺点
 </typeAliases>
 ```    
 
-
 *配置各个标签时注意前后的顺序*
+## MyBatis参数传递
+
+Mybatis接口方法中可以接受各种各样的参数,Mybatis地层对于这些参数采用不同的封装处理方式,不建议使用默认的名称,如arg0或parm1;推荐使用@parm注解替换Map集合中默认arg键名
+
+- 单个参数
+    1. pojo类型   直接使用,属性名和参数占位符名称一致
+    2. Map集合  直接使用,键名和参数占位符名称一致
+    3. Collection  封装成Map集合,两个键对应的集合类型,arg0和collectoin
+    4. List  三个键对应的集合类型,arg0,collectoin和list
+    5. Array 封装成Map集合,arg0和array
+    6. 其他类型:可以直接使用
+- 多个参数
+  - 会封装成Map集合来创建参数,需要一个键和一个值,一个参数会产生两个键,  带Param注解时会替换Map中arg的键名
+    - map.put("arg0",参数值1)
+    - map.put("param1",参数值1)
+    - map.put("arg1",参数值2)
+    - map.put("param2",参数值2)
+    ```java
+    User select(@Param("usename") String username,@Param("password") String password)
+    //也可以不写注解,那么变量名就得用arg0,param1
+    User select(String username,String password)
+    ```
+    ```xml
+    <select id="select" resultType="user">
+    select *
+    from tb_user
+    where
+    username=#{username}
+    and password=#{password}
+    </select>
+    <!-- 当不写注解时,但不推荐 -->
+    <select id="select" resultType="user">
+    select *
+    from tb_user
+    where
+    username=#{arg0}
+    and password=#{param2}
+    </select>
+    ```
+MyBatis提供了ParamNameResolver类来进行参数封装  
+建议:  
+将来都建议使用@parm注解修改map中的默认键名,并使用修改后的名称来获取值,这样可读性更高    
+单个参数中的Collection,List,Array和其他类型,还有多个参数使用注解  
 ## 配置文件完成增删改查
 
 
 ## 注解完成增删改查
+注解完成简单功能  
+配置文件完成复杂功能  
 
+*用注解来映射简单语句会使代码显得更加简洁,但对于稍微复杂一点的浯句 Java 注解不仅力不从心,还会让你本就复杂 SQL 语句更加混乱不堪.因此,如果你需要做一些很复杂的操作,最好用 XML 来映射语句*  
 
+*选择何种方式来配置映射,以及认为是否应该统一映射语句定义的形式,完全取决于你和你团队换句话说,永远不要拘泥于一种方式,你可以很轻松的在基于注解和XML的语句映射方式间自由移植和切换*
 ## 动态SQL
 
 ## MybatisX插件
