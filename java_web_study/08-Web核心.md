@@ -281,9 +281,207 @@ maven打包方式由两个,jar和war*
 直接运行(还能使用断点调试)  
     <img src="./img/08-11.png" style="height:500px">
 
+也能在idea控制台使用`mvn tomcat7:run`来启动
 
 ## Servlet
 
 是Java提供的一门动态web资源开发技术
 
 是JavaEE规范之一,实际上就是一个**接口**,将来我们需要定义Servlrt类实现Servlet接口,并由web服务器运行Servlet
+
+### 快速入门
+
+1. 创建web项目,导入Servlet依赖坐标
+   ```xml
+    <dependencies>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+    <!--表示作用于运行环境,打包默认有这个包-->
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+   ```
+2. 创建:定义一个类,在`java`路径下,实现Servlrt接口,并重写接口中所有方法,并放在Servlet方法中输入一句话
+   ```java
+    public class ServletDome1 implements Servlet{
+        public void service(){}
+    }
+   ```
+3. 配置:在类上使用@WebServlet注解,配置该Servlet的访问路径
+   ```java
+    @WebServlet("/demo1")
+    public class ServletDome1 implements Servlet{
+        public void service(){}
+    }
+   ```
+4. 访问:启动Tomcat,浏览器输入URL访问该Servlet
+    ```dotnetcli
+    http://localhost:8080/web-demo/demo1
+    ```
+
+### Servlet执行流程
+
+<img src="./img/08-13.png" style="height:500px">    
+
+1. Servlet 由谁创建?Servlet方法由谁调用
+    Servlet由web服务器创建,Servlet方法由web服务器调用
+2. 服务器为什么知道Servlet中一定由Servlet方法?
+    因为我们自定义的Servlet,必须实现Servlet接口并复写其方法
+
+
+### Servlet生命周期
+
+
+对象的生命周期是指的是一个对象从创建到被销毁的整个过程
+
+servlet运行在servlet容器 (web 服务器)中,其生命周期由容器来管理分为 4 个阶段 
+1. 加载和实例化  
+    默认情况下,当 servlet 第一次被访问时,由容器创建 servlet 对象
+2. 初始化  
+    在 servlet 实例化之后,容器将调用servlet的`init( )`方法初始化这个对象,完成一些如加载配置文件,创建连接等初始化的工作.该方法只调用一次
+1. 请求处理  
+    每次请求 servlet 时, servlet 容器都会调用servlet 的 `service()` 方法对请求进行处理 。
+2. 服务终止  
+    当需要释放内存或者容器关闭时,容器就会调用 servlet 实例的 `destroy()` 方法完成资源的释放 。 在 `destroy()` 方法调用之后,容器会释放这个 servlet 实例, 该实例随后会被 Java 的垃圾收集器所回收
+
+
+
+```java
+@webServlet(erlPatterns="/demo",loadOnStartup=1)
+```
+1. 负整数:第一次被访问的时候创建Servlet对象
+2. 0或正整数:服务器启动时创建Servlet对象,数值越小,优先级越高
+
+常见的三个函数
+
+```java
+
+@WebServlet("/demo1")
+public class ServletDome2 implements Servlet {
+    /**
+     * 初始化方法,默认情况下,Servlet第一次被访问的时候调用
+     *只会调用1次
+     * 可以用loadOnStartup更改调用次数
+     * */
+    @Override
+    public void init(ServletConfig servletConfig) throws ServletException {
+    }
+    /**
+     * 调用时机:每一次Servlet被访问/调用的时候
+     * 调用次数:每一次
+     * */
+    @Override
+    public void service(ServletRequest servletRequest, ServletResponse servletResponse) throws ServletException, IOException {
+        System.out.println("Servlet hello world!~");
+    }
+    /**
+     * 销毁方法
+     * 在Servlet被销毁的时候调用
+     * 内存释放或服务器关闭时被调用 ,调用1次
+     * */
+    @Override
+    public void destroy() {
+    }
+}
+```
+还有其他方法
+获取ServletConfig对象
+```java
+ServletConfig getServletConfig()
+```
+
+获取Servlet对象
+```java
+String getServletInfo()
+```
+
+### Servlet体系结构
+
+<img src="./img/08-14.png" style="height:500px">
+
+我们将来开发B/S架构的web项目,都是针对HTTP协议,所以我们自定义Servlet,会继承HttpServlet
+
+```java
+@WebServlet("/demo3")
+public class ServletDome3 extends HttpServlet {
+// 一般都是重写doGet和doPost方法
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("网页get请求会调用该接口");
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("网页post请求会调用该接口");
+    }
+}
+```
+
+为什么`HttpServlet`类会根据请求方式的不同会调用不同的方法?
+get和post的请求消息不太一样,我们应该分开处理
+
+### Servlet urlPattern配置
+
+1. 一个Servlet,可以配置多个urlPattern
+    ```java
+    @webServlet(erlPatterns={"/demo1,/demo2"})
+    ```
+2. urlPattern配置规则
+   - 精准匹配
+        ```java
+        @webServlet("/deme1")
+        //匹配路径http://localhost:8282/tomcat-dom1/demo1
+        ```
+   - 目录匹配
+        ```java
+        @webServlet("/user/*")
+        //匹配路径http://localhost:8282/tomcat-dom1/user/aaa
+        //匹配路径http://localhost:8282/tomcat-dom1/user/bbb
+        ```
+   - 扩展名匹配
+        ```java
+         //不能用/开头
+        @webServlet("*.do")
+        //匹配路径http://localhost:8282/tomcat-dom1/aaa.do
+        //匹配路径http://localhost:8282/tomcat-dom1/bbb.do
+        ```
+   - 任意匹配
+        ```java
+        @webServlet("/*")
+        //匹配路径http://localhost:8282/tomcat-dom1/demo1
+        //匹配路径http://localhost:8282/tomcat-dom1/demo2
+        ```
+当一个路径满足多个匹配时,多个匹配都能正常响应,  
+但具有优先级:精准匹配 > 目录匹配 > 扩展名匹配 > `"/*"` > `"/"`
+
+`"/"`和`"/*"`的区别  
+   - 当我们项目中的Servlet配置了`"/"`,会覆盖掉tomcat中DefaultServlet,当其他的erlPatterns都匹配不上的时候会走这个Servlet
+   - 当我们项目中的Servlet配置了`"/*"`,意味着匹配任意的访问路径  
+   - 
+所以说,在以后,`"/"`和`"/*"`路径匹配我们都尽量不要去配置
+
+### XML配置方式编写Servlet
+
+Servlet从3.0版本后开始支持注解配置,3.0版本以前只支持XML配置文件的配置方式
+
+步骤
+1. 编写Servlet类
+2. 在`webapp/WEB-INF/web.xml`中配置该Servlet,写在`web-app`标签内
+    ```xml
+    <!--Servlet全类名-->
+    <servlet>
+    <!--声明匹配规则的名字-->
+        <servlet-name>Dome3</servlet-name>
+    <!--类名来源,不加.java-->
+        <servlet-class>com.dujiang.web.ServletDome3</servlet-class>
+    </servlet>
+    <!--Servlet访问路径-->
+    <servlet-mapping>
+    <!--匹配上面servlet标签里面的名字-->
+        <servlet-name>Dome3</servlet-name>
+    <!--Servlet访问路径-->
+        <url-pattern>/demo3</url-pattern>
+    </servlet-mapping>
+    ```
