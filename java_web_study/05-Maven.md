@@ -44,11 +44,11 @@ Apache Maven是一个项目管理和构建工具,它基于项目对象模型(POM
 4. 配置阿里云私服:修改conf/settiings.xml中的\<mirrors\>,为其添加如下子标签
    ```xml
    <mirror>
-        <id>alimaven</id>
-        <name>aliyun maven</name>
-        <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
-        <mirrorOf>centeral</mirrorOf>
-   </mirror>
+      <id>alimaven</id>
+      <mirrorOf>central</mirrorOf>
+      <name>aliyun maven</name>
+      <url>http://maven.aliyun.com/nexus/content/repositories/central/</url>
+    </mirror>
    ```
 ## Maven基本使用
 ### Maven常用命令  
