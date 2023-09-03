@@ -92,6 +92,80 @@ $$
 | 1      |      2 |   3    |
 | 4      |      5 |   6    |
 
+
+<table>
+  <tbody>
+    <tr>
+      <th colspan="3"></th>
+      <th scope="col">Subject</th>
+      <th scope="col">Object</th>
+    </tr>
+    <tr>
+      <th rowspan="5">单数</th>
+      <th colspan="2">第一人称</th>
+      <td>I</td>
+      <td>me</td>
+    </tr>
+    <tr>
+      <th colspan="2">第二人称</th>
+      <td>you</td>
+      <td>you</td>
+    </tr>
+    <tr>
+      <th rowspan="3">第三人称</th>
+      <th >♂</th>
+      <td>he</td>
+      <td>him</td>
+    </tr>
+    <tr>
+      <th>♀</th>
+      <td>she</td>
+      <td>her</td>
+    </tr>
+    <tr>
+      <th>o</th>
+      <td>it</td>
+      <td>it</td>
+    </tr>
+    <tr>
+      <th rowspan="3" >复数</th>
+      <th colspan="2" >第一人称</th>
+      <td>we</td>
+      <td>us</td>
+    </tr>
+    <tr>
+      <th colspan="2">第二人称</th>
+      <td>you</td>
+      <td>you</td>
+    </tr>
+    <tr>
+      <th colspan="2" >第三人称</th>
+      <td>they</td>
+      <td>them</td>
+    </tr>
+  </tbody>
+</table>
+
+h5表格的结构
+```html
+<table>
+  <tbody>
+    <!-- 标题 -->
+    <tr>
+      <th></th>
+      <th></th>
+    </tr>
+    <!-- 内容主题 -->
+    <tr>
+        <!-- 跨列 -->
+      <td colspan="2"></td>
+        <!-- 跨行 -->
+      <td rowspan="3"></td>
+    </tr>
+  </tbody>
+</table>
+```
+
 ## 超链接
 用[ ]+()，中括号里面是需要标记的文字，小括号里面是[链接](https://www.baidu.com/home)
 
