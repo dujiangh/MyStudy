@@ -92,6 +92,80 @@ $$
 | 1      |      2 |   3    |
 | 4      |      5 |   6    |
 
+
+<table>
+  <tbody>
+    <tr>
+      <th colspan="3"></th>
+      <th scope="col">Subject</th>
+      <th scope="col">Object</th>
+    </tr>
+    <tr>
+      <th rowspan="5">单数</th>
+      <th colspan="2">第一人称</th>
+      <td>I</td>
+      <td>me</td>
+    </tr>
+    <tr>
+      <th colspan="2">第二人称</th>
+      <td>you</td>
+      <td>you</td>
+    </tr>
+    <tr>
+      <th rowspan="3">第三人称</th>
+      <th >♂</th>
+      <td>he</td>
+      <td>him</td>
+    </tr>
+    <tr>
+      <th>♀</th>
+      <td>she</td>
+      <td>her</td>
+    </tr>
+    <tr>
+      <th>o</th>
+      <td>it</td>
+      <td>it</td>
+    </tr>
+    <tr>
+      <th rowspan="3" >复数</th>
+      <th colspan="2" >第一人称</th>
+      <td>we</td>
+      <td>us</td>
+    </tr>
+    <tr>
+      <th colspan="2">第二人称</th>
+      <td>you</td>
+      <td>you</td>
+    </tr>
+    <tr>
+      <th colspan="2" >第三人称</th>
+      <td>they</td>
+      <td>them</td>
+    </tr>
+  </tbody>
+</table>
+
+h5表格的结构
+```html
+<table>
+  <tbody>
+    <!-- 标题 -->
+    <tr>
+      <th></th>
+      <th></th>
+    </tr>
+    <!-- 内容主题 -->
+    <tr>
+        <!-- 跨列 -->
+      <td colspan="2"></td>
+        <!-- 跨行 -->
+      <td rowspan="3"></td>
+    </tr>
+  </tbody>
+</table>
+```
+
 ## 超链接
 用[ ]+()，中括号里面是需要标记的文字，小括号里面是[链接](https://www.baidu.com/home)
 
@@ -103,7 +177,26 @@ $$
 int num=10;
 return 0;
 ```
+## 隐藏
+使用html可以实现点击打开代码块
 
+    <details>
+      <summary>点击时的区域标题</summary>
+    
+    ```bash
+    echo "hello shell"  
+    echo "hello python"  
+    ```
+    </details>
+效果如下
+<details>
+  <summary>点击时的区域标题</summary>
+
+```bash
+echo "hello shell"  
+echo "hello python"  
+```
+</details>
 
 ## 注释
 
@@ -116,3 +209,31 @@ return 0;
 [vscode中markdown插件网站](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one)
 
 <div style="background:red">name</div>
+
+## GFM 语法
+
+    GFM（GitHub Flavored Markdown）语法是除了标准的Markdown语法外最被广泛使用的另一种版本Markdown语法，它基于CommonMark。GFM语法与标准的Markdown语法大同小异，扩展了一些标准的Markdown语法没有的内容
+ GFM与标准的Markdown标记语法的异同  
+GFM语法与标准的Markdown标记语法大部分内容是相同的，这里以本系列教程前面讲过的「标准的Markdown标记语法」作为参考，给出GFM语法与标准Markdown语法的区别。
+
+### 删除线
+在标准的Markdown中是不支持「删除线」效果的标记。
+
+在GFM中，可以通过~~实现删除线的效果：
+
+~~我是被删除的内容~~
+
+### 任务表
+使用`- [ ] 任务1`或者`- [X] 任务2`表示一个任务
+
+- [ ] 任务1
+- [X] 任务2
+  
+### Emoji标签兼容(vscode不支持)
+
+:peach:  
+:EMOJICODE
+
+[表情链接1](https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md)    
+
+[表情链接2](https://www.webfx.com/tools/emoji-cheat-sheet/)
